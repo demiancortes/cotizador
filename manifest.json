@@ -1,0 +1,22 @@
+{
+	"name": "Cotizador Persianas Vizual",
+	"short_name": "Cotizador",
+	"start_url": "/",
+	"display": "standalone",
+	"orientation": "portrait",
+	"background_color": "#ffffff",
+	"theme_color": "#1CC26B",
+	"description": "Cotiza persianas a la medida rápida y fácilmente.",
+	"icons": [
+		{
+			"src": "/assets/icons/android-chrome-192x192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/assets/icons/android-chrome-512x512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}
