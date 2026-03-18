@@ -16,5 +16,13 @@ navLinks.forEach(link => {
 
 		screens.forEach(s => s.classList.add("d-none"));
 		document.getElementById(target).classList.remove("d-none");
+
+		if (target === "cotizacion") {
+			mostrarConfig();
+		}
 	});
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+	cargarConfig();
 });

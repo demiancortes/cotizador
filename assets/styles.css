@@ -103,3 +103,27 @@ td:first-child {
 	font-size: 0.92rem;
 	color: #6c757d;
 }
+
+#tabla-medidas td {
+	vertical-align: middle;
+}
+
+#tabla-medidas td:last-child {
+	white-space: nowrap;
+}
+
+#btnNuevaCotizacion:hover{
+	background:#198754;
+	color:white;
+	border-color:#198754;
+}
+
+#btnModeloExtra:hover{
+	background:#0d6efd;
+	color:white;
+	border-color:#0d6efd;
+}
+
+#btnModeloExtra, #btnNuevaCotizacion{
+	transition:all .15s ease;
+}

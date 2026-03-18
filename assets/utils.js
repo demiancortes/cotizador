@@ -1,5 +1,5 @@
 /* ================================
-   CONSTANTES Y HELPERS GLOBALES
+	CONSTANTES Y HELPERS GLOBALES
 ================================ */
 
 const DEFAULT_PRECIOS = {
@@ -30,8 +30,27 @@ const DEFAULT_COLORES = {
 	enrollable: "#198754"
 };
 
+const CONFIG_DEFAULT = {
+	empresa: "PERSIANAS VIZUAL MAZATLÁN",
+	vendedor: "Demian Cortés",
+	telefono: "6691 632 351",
+	slogan: "Dale a tu hogar el toque que se merece ✨"
+};
+
+function cargarConfig() {
+	let cfg = localStorage.getItem("configSistema");
+	if (!cfg){
+		localStorage.setItem("configSistema", JSON.stringify(CONFIG_DEFAULT));
+		return CONFIG_DEFAULT;
+	}
+
+	return JSON.parse(cfg);
+}
+
 const LS_KEYS = {
-	PRECIOS: "cotizador_precios_v1"
+	PRECIOS: "cotizador_precios_v1",
+	CONFIG: "configSistema",
+	TABLA: "tablaMedidas"
 };
 
 const precios = { ...DEFAULT_PRECIOS };
@@ -54,6 +73,12 @@ function calcularPrecio(modelo, ancho, alto) {
 	return Math.ceil((m2 * precios.enrollableBase) + (precios.enrollableExtra * ancho));
 }
 
+function activarTooltips(){
+	document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(el => {
+		new bootstrap.Tooltip(el);
+	});
+}
+
 /* ---------- LocalStorage ---------- */
 
 function initLocalStorage() {
@@ -67,6 +92,19 @@ function cargarPrecios() {
 	Object.keys(DEFAULT_PRECIOS).forEach(k => {
 		precios[k] = Number(guardado[k] ?? DEFAULT_PRECIOS[k]);
 	});
+}
+
+function mostrarConfig() {
+
+	const guardada = localStorage.getItem("configSistema");
+
+	if (!guardada) return;
+
+	const cfg = JSON.parse(guardada);
+
+	document.getElementById("cfgEmpresa").innerText = cfg.empresa;
+	document.getElementById("cfgVendedor").innerHTML = `<b>${cfg.vendedor}</b> — ${cfg.telefono}`;
+	document.getElementById("cfgSlogan").innerText = cfg.slogan;
 }
 
 initLocalStorage();

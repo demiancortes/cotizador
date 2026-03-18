@@ -10,7 +10,7 @@ const btnWhatsApp = document.getElementById("btnWhatsApp");
 /* ========= GENERAR COTIZACIÓN ========= */
 
 btnGenerar.addEventListener("click", () => {
-
+	mostrarConfig();
 	const checks = [...document.querySelectorAll(".filaCheck:checked")];
 
 	if (!checks.length) {
@@ -82,9 +82,7 @@ btnGenerar.addEventListener("click", () => {
 	}
 
 	const folio = 1000 + Math.floor(Math.random() * 9000);
-	document.getElementById("badge-folio").innerText =
-	`COTIZACIÓN #${folio} — ${fechaCorta()}`;
-
+	document.getElementById("badge-folio").innerText = `COTIZACIÓN #${folio} — ${fechaCorta()}`;
 	document.querySelector("[data-target='cotizacion']").click();
 });
 
@@ -115,15 +113,14 @@ btnGenerarImagen.addEventListener("click", async () => {
 	link.click();
 });
 
-/* ========= WHATSAPP ========= */
-
-btnWhatsApp.addEventListener("click", () => {
+/* ========= GENERAR TEXTO CON O SIN FORMATO ========= */
+function generarTextoCotizacion(conFormato = true){
 
 	const checks = [...document.querySelectorAll(".filaCheck:checked")];
 
 	if (!checks.length) {
-		alert("Selecciona al menos una medida para compartir.");
-		return;
+		alert("Selecciona al menos una medida.");
+		return null;
 	}
 
 	const grupos = {};
@@ -145,17 +142,46 @@ btnWhatsApp.addEventListener("click", () => {
 	let texto = `Cotización – Persianas Vizual Mazatlán ✨\n\n`;
 
 	for (const modelo in grupos) {
-		texto += `${modelo}\n`;
+
+		texto += `Modelo ${nombres[modelo] || modelo}\n`;
 
 		grupos[modelo].items.forEach(item => {
 			texto += `• ${item.desc} — $${item.precio}\n`;
 		});
 
-		texto += `*Total ${modelo}: $${grupos[modelo].total}*\n\n`;
+		if (conFormato){
+			texto += `*Total ${modelo}: $${grupos[modelo].total}*\n\n`;
+		}else{
+			texto += `Total ${modelo}: $${grupos[modelo].total}\n\n`;
+		}
 	}
 
-	texto += `—\nDemian Cortés\n📲 6691 632 351`;
+	const cfg = JSON.parse(localStorage.getItem(LS_KEYS.CONFIG)) || {};
+	texto += `—\n${cfg.vendedor || ""}\n📲 ${cfg.telefono || ""}`;
+
+	return texto;
+}
+
+/* ========= WHATSAPP ========= */
+
+btnWhatsApp.addEventListener("click", () => {
+
+	const texto = generarTextoCotizacion(true);
+	if (!texto) return;
 
 	const url = `https://wa.me/?text=${encodeURIComponent(texto)}`;
 	window.open(url, "_blank");
+
+});
+
+/* ========= COPIAR COTIZACIÓN ========= */
+btnCopiarCotizacion.addEventListener("click", () => {
+
+	const texto = generarTextoCotizacion(false);
+	if (!texto) return;
+
+	navigator.clipboard.writeText(texto);
+
+	alert("Cotización copiada");
+
 });
